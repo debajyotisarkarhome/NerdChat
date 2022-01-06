@@ -1,28 +1,35 @@
 const socketio=require("socket.io")
+const generateRoomToken = require("./utils/generateRoomToken.js")
 const io = socketio(3000,{
   cors: {
-    origin: ["http://localhost:8080","https://admin.socket.io/"]
+    origin: ["http://localhost:8080"]
   }
 });
 
 matchBuffer=[]
 
 io.on("connection",socket => {
+  roomid=generateRoomToken.generateRoomToken()
+  //console.log(io.sockets.sockets.keys("srvSockets"))
   socket.emit("debugInfo","Connection ID : "+socket.id)
-  //const clients = Array.from(io.sockets.adapter.rooms.keys())
-  matchBuffer.push(socket.id)
-  if(matchBuffer.length<2){
+  const clients = Array.from(io.sockets.sockets.keys("srvSockets"))
+  //console.log(clients.length)
+  if(clients.length%2!=0){
     socket.emit("wait",1)
   }
   else{
-    socket.join(matchBuffer[0])
-    //socket.emit("wait",0,matchBuffer[0])
-    io.to(matchBuffer[0]).emit("wait",0,matchBuffer[0])
-    matchBuffer=[]
+    originRoomid=clients.length-2
+    originRoomSocket=io.sockets.sockets.get(clients[originRoomid]);
+    socket.join(roomid)
+    originRoomSocket.join(roomid)
+    io.to(roomid).emit("wait",0,roomid)
   }
+  //console.log(io.sockets.adapter.rooms)
+  //console.log(socket.rooms)
+
   socket.on("send-message",message=>{
-    socket.broadcast.emit("receive-message",message)
-    console.log("yup");
+    //console.log(roomid)
+    socket.to(Array.from(socket.rooms)).emit("receive-message",message)
   })
 })
   

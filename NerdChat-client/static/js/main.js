@@ -22,9 +22,17 @@ socket.on('receive-message',message=>{
 socket.on('wait',(bool,id)=>{
     if(bool==1){
         displayMessageInfo("Waiting for new meaws")
+        var elements = form.elements;
+        for (var i = 0, len = elements.length; i < len; ++i) {
+            elements[i].disabled = true;
+        }
     }
     else{
         displayMessageInfo("Connected to Room "+id)
+        var elements = form.elements;
+        for (var i = 0, len = elements.length; i < len; ++i) {
+            elements[i].disabled = false;
+        }
     }
 })
 
