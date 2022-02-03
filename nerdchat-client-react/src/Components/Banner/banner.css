@@ -1,0 +1,8 @@
+.banner{
+    height: fit-content;
+    width: fit-content;
+}
+.bannerImage{
+    background-color: rgb(152, 255, 255);
+    width: 100%;
+}

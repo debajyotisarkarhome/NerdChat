@@ -1,0 +1,16 @@
+.overlay{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 1000;
+    height: calc(100vh - 100px);
+    width: 100%;
+}
+.startButton{
+    background-color : rgb(202, 120, 198) !important; 
+}
+.dummy{
+    filter: blur(5px);
+    position: relative;
+}

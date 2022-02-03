@@ -1,14 +1,15 @@
 const socketio=require("socket.io")
 const generateRoomToken = require("./utils/generateRoomToken.js")
-const io = socketio(3000,{
+const io = socketio(3030,{
   cors: {
-    origin: ["http://localhost:8080"]
+    origin: ["http://localhost:3000"]
   }
 });
 
 matchBuffer=[]
 
 io.on("connection",socket => {
+  console.log(socket.id)
   roomid=generateRoomToken.generateRoomToken()
   //console.log(io.sockets.sockets.keys("srvSockets"))
   socket.emit("debugInfo","Connection ID : "+socket.id)
@@ -28,7 +29,7 @@ io.on("connection",socket => {
   //console.log(socket.rooms)
 
   socket.on("send-message",message=>{
-    //console.log(roomid)
+    console.log(message)
     socket.to(Array.from(socket.rooms)).emit("receive-message",message)
   })
 })
